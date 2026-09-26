@@ -7,10 +7,10 @@ public abstract class AbstractController implements Controller {
 
     @Override
     public void service(HttpRequest request, Http11Response response) throws Exception {
-        if ("GET".equals(request.getRequestLine().httpMethod())) {
+        if (request.isGet()) {
             doGet(request, response);
         }
-        if ("POST".equals(request.getRequestLine().httpMethod())) {
+        if (request.isPost()) {
             doPost(request, response);
         }
     }

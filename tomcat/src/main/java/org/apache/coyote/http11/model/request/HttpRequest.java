@@ -22,6 +22,14 @@ public class HttpRequest {
         return new HttpRequest(requestLine, requestHeader, requestBody);
     }
 
+    public boolean isGet() {
+        return "GET".equals(requestLine.httpMethod());
+    }
+
+    public boolean isPost() {
+        return "POST".equals(requestLine.httpMethod());
+    }
+
     public String getRequestPath() {
         return requestLine.uriInfo().path();
     }
