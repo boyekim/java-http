@@ -2,6 +2,7 @@ package org.apache.coyote.http11.model.request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Locale;
 
 public record RequestHeader(
         int contentLength,
@@ -13,13 +14,17 @@ public record RequestHeader(
         int requestContentLength = 0;
         String cookieForm = "";
         while ((line = reader.readLine()) != null && !line.isEmpty()) {
-            if (line.contains("Content-Length")) {
-                String[] contentLengthLine = line.split(":", 2);
-                requestContentLength = Integer.parseInt(contentLengthLine[1].trim());
+            String[] header = line.split(":", 2);
+            if (header.length != 2) {
+                continue;
             }
-            if (line.contains("Cookie")) {
-                String[] cookieLine = line.split(":", 2);
-                cookieForm = cookieLine[1].trim();
+            String name = header[0].trim().toLowerCase(Locale.ROOT);
+            String value = header[1].trim();
+            if ("content-length".equals(name)) {
+                requestContentLength = Integer.parseInt(value);
+            }
+            if ("cookie".equals(name)) {
+                cookieForm = value;
             }
         }
         return new RequestHeader(requestContentLength, Cookie.from(cookieForm));
