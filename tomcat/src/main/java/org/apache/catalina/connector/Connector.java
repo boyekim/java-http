@@ -21,13 +21,13 @@ public class Connector implements Runnable {
     private final RequestMapping requestMapping;
     private boolean stopped;
 
-    public Connector() {
-        this(DEFAULT_PORT, DEFAULT_ACCEPT_COUNT);
+    public Connector(final RequestMapping requestMapping) {
+        this(DEFAULT_PORT, DEFAULT_ACCEPT_COUNT, requestMapping);
     }
 
-    public Connector(final int port, final int acceptCount) {
+    public Connector(final int port, final int acceptCount, final RequestMapping requestMapping) {
         this.serverSocket = createServerSocket(port, acceptCount);
-        this.requestMapping = new RequestMapping();
+        this.requestMapping = requestMapping;
         this.stopped = false;
     }
 

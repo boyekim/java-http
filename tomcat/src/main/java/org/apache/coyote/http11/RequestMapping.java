@@ -1,5 +1,6 @@
 package org.apache.coyote.http11;
 
+import org.apache.catalina.session.SessionManager;
 import org.apache.coyote.http11.controller.Controller;
 import org.apache.coyote.http11.controller.HomeController;
 import org.apache.coyote.http11.controller.LoginController;
@@ -9,13 +10,19 @@ import org.apache.coyote.http11.model.request.HttpRequest;
 
 public class RequestMapping {
 
+    private final SessionManager sessionManager;
+
+    public RequestMapping(SessionManager sessionManager) {
+        this.sessionManager = sessionManager;
+    }
+
     public Controller getController(HttpRequest request) {
         String path = request.getRequestPath();
         if ("/".equals(request.getRequestPath())) {
             return new HomeController();
         }
         if ("/login".equals(request.getRequestPath())) {
-            return new LoginController();
+            return new LoginController(sessionManager);
         }
         if ("/register".equals(request.getRequestPath())) {
             return new RegisterController();
